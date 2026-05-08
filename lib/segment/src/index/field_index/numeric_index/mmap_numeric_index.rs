@@ -11,7 +11,9 @@ use common::generic_consts::Random;
 use common::mmap::{MmapSlice, create_and_ensure_length};
 use common::stored_bitslice::MmapBitSlice;
 use common::types::PointOffsetType;
-use common::universal_io::{MmapFile, OpenOptions, ReadRange, TypedStorage, UniversalRead};
+use common::universal_io::{
+    MmapFile, OpenOptions, Populate, ReadRange, TypedStorage, UniversalRead,
+};
 use fs_err as fs;
 use itertools::Either;
 use memmap2::MmapMut;
@@ -174,7 +176,7 @@ impl<T: Encodable + Numericable + Default + StoredValue + bytemuck::Pod> MmapNum
             writeable: false,
             need_sequential: false,
             disk_parallel: None,
-            populate: do_populate.into(),
+            populate: Populate::from(do_populate),
             advice: None,
             prevent_caching: None,
         };
